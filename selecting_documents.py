@@ -17,37 +17,56 @@ nltk.download('punkt')
 my_dirpath = '//fs.geo.uzh.ch/ochesnok/documents/2_projects/11_tranquillity/corpus/'
 filename_input = 'geograph_data/gridimage_text.tsv'
 
-search_terms = ['tranquillity','tranquility','tranquil','silence','silent','atmosphere','calmness','peace','peaceful','pleasant','serene','quiet']
+search_terms = ['tranquillity','tranquility','tranquil','silence','silent','peace','peaceful','serene','quiet','calmness','pleasant','atmosphere']
 
-def extract_descriptions(input_list):
-    """This function extracts descriptions containing predefined search terms (input_list).
-    The descriptions are saved in individual files for each search term (e.g., tranquillity.tsv).
-    The function returns two arrays: counts of descriptions per search term and an array of search terms.
-    These will be further used to plot the counts distribution."""
+def extract_descriptions(input_list, output_file):
+    """This function extracts descriptions containing predefined search terms (input_list)"""
     input_text_Geograph = pd.read_csv(os.path.join(my_dirpath, filename_input), delimiter='\t', encoding='latin1')
     length = input_text_Geograph.shape[0]
-    count_arr = []
-    x_labels_arr = []
-    for j in input_list:
-        print j
-        count = 0
+    output_descriptions = codecs.open(output_file, 'w', 'utf-8')
+    output_descriptions.writelines('gridimage_id\tcomment\tsearch_term\n')
+    for i in range(0, length):
+        comment = input_text_Geograph["comment"][i]
+        try:
+            comment = replace_encoding_stuff(str(comment))
+            gridimage_id = input_text_Geograph["gridimage_id"][i]
+            doc = word_tokenize(str(comment))
+            for token in doc:
+                if token.lower() in input_list:
+                    output_descriptions.writelines(str(gridimage_id) + '\t' + str(comment) + '\t' + str(token) + '\n')
+        except:
+            print comment
+    return
+
+
+def extract_individual_descriptions(input_file):
+    """This function creates individual files for each search term (e.g., tranquillity.tsv)
+    and plots how many of them are present in the descriptions"""
+    input_text_tranquillity = pd.read_csv(os.path.join(my_dirpath, input_file), delimiter='\t', encoding='latin1')
+    length = input_text_tranquillity.shape[0]
+
+    terms_dic = {}
+    for i in range(0, length):
+        comment = input_text_tranquillity["comment"][i]
+        gridimage_id = input_text_tranquillity["gridimage_id"][i]
+        search_term = input_text_tranquillity["search_term"][i]
+        if search_term.lower() in terms_dic.keys():
+            terms_dic[search_term.lower()].append((gridimage_id, comment))
+        else:
+            terms_dic[search_term.lower()] = [gridimage_id, comment]
+    unique_keys = set(terms_dic.keys())
+    for j in unique_keys:
         output_file = os.path.join(my_dirpath, 'results/', str(j)+'.tsv')
         output_descriptions = codecs.open(output_file, 'w', 'utf-8')
         output_descriptions.writelines('gridimage_id\tcomment\n')
-        for i in range(0, 10000):
-            comment = input_text_Geograph["comment"][i]
-            try:
-                comment = replace_encoding_stuff(str(comment))
-                gridimage_id = input_text_Geograph["gridimage_id"][i]
-                doc = word_tokenize(str(comment))
-                for token in doc:
-                    if token.lower() == str(j):
-                        count = count + 1
-                        output_descriptions.writelines(str(gridimage_id) + '\t' + str(comment) + '\n')
-            except:
-                print comment
-        count_arr.append(count)
-        x_labels_arr.append(j)
+        for key, value in terms_dic.iteritems():
+            if key == j:
+                output_descriptions.writelines(str(value[0]) + '\t' + str(value[1]) + '\n')
+    count_arr = []
+    x_labels_arr = []
+    for k, v in terms_dic.iteritems():
+        count_arr.append(len(v))
+        x_labels_arr.append(k)
     n_groups = len(count_arr)
     index = np.arange(n_groups)
     bar_width = 1
@@ -58,7 +77,7 @@ def extract_descriptions(input_list):
     plt.savefig(os.path.join(my_dirpath, 'results.png'), bbox_inches = "tight")
     return
 
-def extract_random(rootdir,sample_size):
+def extract_random(rootdir, sample_size):
     """The function searches for all files in the specified root directory (rootdir).
     The argument 'sample_size' specifies number of random descriptions (e.g., 100) necessary for
     further manual classification."""
@@ -84,7 +103,9 @@ def extract_random(rootdir,sample_size):
                     output_descriptions_random.writelines(str(key) + '\t' + str(value) + '\n')
     return
 
+results_file = os.path.join(my_dirpath, 'all_tranquillity_descriptions.tsv')
 
-result = extract_descriptions(search_terms)
+result = extract_descriptions(search_terms, results_file)
+individual_files = extract_individual_descriptions(results_file)
 
-random_examples = extract_random(os.path.join(my_dirpath, 'results/'), 2)
+# random_examples = extract_random(os.path.join(my_dirpath, 'results/'), 100)
