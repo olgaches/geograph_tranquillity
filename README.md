@@ -6,5 +6,5 @@ Tranquillity search terms are published in:
 Wartmann, F.M., Tieskens, K.F., van Zanten, B.T., Verburg, P.H., 2019. 
 Exploring tranquillity experienced in landscapes based on social media. Appl. Geogr. 113, 102112.
 
-Additionally, the script "selecting_documents.py" creates files with 100 random descriptions extracted using each of the search terms.
+Additionally, the script "selecting_documents.py" creates files with x random descriptions extracted using each of the search terms.
 These are further used for manual annotation.
