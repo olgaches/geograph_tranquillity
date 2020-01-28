@@ -24,7 +24,7 @@ def extract_descriptions(input_list, output_file):
     input_text_Geograph = pd.read_csv(os.path.join(my_dirpath, filename_input), delimiter='\t', encoding='latin1')
     length = input_text_Geograph.shape[0]
     output_descriptions = codecs.open(output_file, 'w', 'utf-8')
-    output_descriptions.writelines('gridimage_id\tcomment\tsearch_term\n')
+    output_descriptions.writelines('gridimage_id;;comment;;search_term\n')
     for i in range(0, length):
         comment = input_text_Geograph["comment"][i]
         try:
@@ -33,7 +33,7 @@ def extract_descriptions(input_list, output_file):
             doc = word_tokenize(str(comment))
             for token in doc:
                 if token.lower() in input_list:
-                    output_descriptions.writelines(str(gridimage_id) + '\t' + str(comment) + '\t' + str(token) + '\n')
+                    output_descriptions.writelines(str(gridimage_id) + ';;' + str(comment) + ';;' + str(token) + '\n')
         except:
             print comment
     return
@@ -42,7 +42,7 @@ def extract_descriptions(input_list, output_file):
 def extract_individual_descriptions(input_file):
     """This function creates individual files for each search term (e.g., tranquillity.tsv)
     and plots how many of them are present in the descriptions"""
-    input_text_tranquillity = pd.read_csv(os.path.join(my_dirpath, input_file), delimiter='\t', encoding='latin1')
+    input_text_tranquillity = pd.read_csv(os.path.join(my_dirpath, input_file), delimiter=';;', encoding='latin1')
     length = input_text_tranquillity.shape[0]
 
     terms_dic = {}
@@ -53,15 +53,20 @@ def extract_individual_descriptions(input_file):
         if search_term.lower() in terms_dic.keys():
             terms_dic[search_term.lower()].append((gridimage_id, comment))
         else:
-            terms_dic[search_term.lower()] = [gridimage_id, comment]
+            terms_dic[search_term.lower()] = [(gridimage_id, comment)]
     unique_keys = set(terms_dic.keys())
     for j in unique_keys:
+        print j
         output_file = os.path.join(my_dirpath, 'results/', str(j)+'.tsv')
         output_descriptions = codecs.open(output_file, 'w', 'utf-8')
-        output_descriptions.writelines('gridimage_id\tcomment\n')
-        for key, value in terms_dic.iteritems():
-            if key == j:
-                output_descriptions.writelines(str(value[0]) + '\t' + str(value[1]) + '\n')
+        output_descriptions.writelines('gridimage_id;;comment\n')
+        individual_descriptions = terms_dic.get(j)
+        for i in individual_descriptions:
+            try:
+                output_descriptions.writelines(str(i[0]) + ';;' + str(i[1]) + '\n')
+            except:
+                print 'to fix',i
+                #output_descriptions.writelines(str(i) + ';;' + str(i[1]) + '\n')
     count_arr = []
     x_labels_arr = []
     for k, v in terms_dic.iteritems():
@@ -85,9 +90,9 @@ def extract_random(rootdir, sample_size):
         doc_id = str(filename[0:-4])
         output_file_random = os.path.join(rootdir, str(doc_id) + '_random.tsv')
         output_descriptions_random = codecs.open(output_file_random, 'w', 'utf-8')
-        output_descriptions_random.writelines('gridimage_id\tcomment\n')
+        output_descriptions_random.writelines('gridimage_id;;comment\n')
         # check that input files are in the same directory or specify below where they are
-        input_text = pd.read_csv(os.path.join(rootdir, filename), delimiter='\t', encoding='latin1')
+        input_text = pd.read_csv(os.path.join(rootdir, filename), delimiter=';;', encoding='latin1')
         length = input_text.shape[0]
         dic = {}
         for_random = []
@@ -100,12 +105,15 @@ def extract_random(rootdir, sample_size):
             selected_random = random.sample(for_random, sample_size)
             for key, value in dic.iteritems():
                 if key in selected_random:
-                    output_descriptions_random.writelines(str(key) + '\t' + str(value) + '\n')
+                    output_descriptions_random.writelines(str(key) + ';;' + str(value) + '\n')
     return
 
 results_file = os.path.join(my_dirpath, 'all_tranquillity_descriptions.tsv')
 
-result = extract_descriptions(search_terms, results_file)
-individual_files = extract_individual_descriptions(results_file)
+#result = extract_descriptions(search_terms, results_file)
+#print 'the big tranquillity file is here'
 
-# random_examples = extract_random(os.path.join(my_dirpath, 'results/'), 100)
+#individual_files = extract_individual_descriptions(results_file)
+#print 'the individual files are created'
+
+random_examples = extract_random(os.path.join(my_dirpath, 'results/'), 100)
