@@ -66,7 +66,6 @@ def extract_individual_descriptions(input_file):
                 output_descriptions.writelines(str(i[0]) + ';;' + str(i[1]) + '\n')
             except:
                 print 'to fix',i
-                #output_descriptions.writelines(str(i) + ';;' + str(i[1]) + '\n')
     count_arr = []
     x_labels_arr = []
     for k, v in terms_dic.iteritems():
