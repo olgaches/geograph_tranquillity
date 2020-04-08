@@ -14,10 +14,11 @@ import nltk
 from nltk import word_tokenize
 nltk.download('punkt')
 
-my_dirpath = '//fs.geo.uzh.ch/ochesnok/documents/2_projects/11_tranquillity/corpus/'
+my_dirpath = '//files.geo.uzh.ch/private/ochesnok/home/Documents/2_projects/11_tranquillity/corpus/'
 filename_input = 'geograph_data/gridimage_text.tsv'
 
-search_terms = ['tranquillity','tranquility','tranquil','silence','silent','peace','peaceful','serene','quiet','calmness','pleasant','atmosphere']
+search_terms = ['tranquillity','tranquility','tranquil','silence','silent','peace','peaceful','serene','quiet','calmness','calm','pleasant','atmosphere']
+search_terms_updated = ['tranquillity','tranquility','tranquil','quiet','peaceful','calm']
 
 def extract_descriptions(input_list, output_file):
     """This function extracts descriptions containing predefined search terms (input_list)"""
@@ -86,6 +87,7 @@ def extract_random(rootdir, sample_size):
     The argument 'sample_size' specifies number of random descriptions (e.g., 100) necessary for
     further manual classification."""
     for filename in os.listdir(rootdir):
+        print filename
         doc_id = str(filename[0:-4])
         output_file_random = os.path.join(rootdir, str(doc_id) + '_random.tsv')
         output_descriptions_random = codecs.open(output_file_random, 'w', 'utf-8')
