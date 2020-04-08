@@ -6,3 +6,7 @@ Wartmann, F.M., Tieskens, K.F., van Zanten, B.T., Verburg, P.H., 2019. Exploring
 
 Additionally, the script "selecting_documents.py" creates files with x random descriptions extracted using each of the search terms.
 These are further used for manual annotation.
+
+"dependency.py" extract all dependencies marked as "amod" (adjectival modifiers). For this code you need Python 3.
+
+"adding_coord_time.py" merges two datasets ( 'gridimage_text.tsv' and gridimage_base.tsv') together.
