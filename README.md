@@ -10,3 +10,5 @@ These are further used for manual annotation.
 "dependency.py" extracts all dependencies marked as "amod" (adjectival modifiers). For this code you need Python 3.
 
 "adding_coord_time.py" merges two datasets ( 'gridimage_text.tsv' and gridimage_base.tsv') together.
+
+"landcover_words.py" creates files used as input for wordle word clouds
