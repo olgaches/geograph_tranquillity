@@ -11,7 +11,7 @@ import nltk
 from nltk import word_tokenize
 nltk.download('punkt')
 
-my_dirpath = '//files.geo.uzh.ch/private/ochesnok/home/Documents/2_projects/11_tranquillity/corpus/'
+my_dirpath = ''
 filename_input_text = 'geograph_data/gridimage_text.tsv'
 filename_input_base = 'geograph_data/gridimage_base.tsv'
 
