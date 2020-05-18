@@ -9,7 +9,7 @@ from collections import Counter
 import math
 import codecs
 
-my_dirpath = ''
+my_dirpath = ' '
 landcover_class = 'arable'
 filename_input_text = landcover_class + '.csv'
 
