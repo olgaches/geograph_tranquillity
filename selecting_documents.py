@@ -14,7 +14,7 @@ import nltk
 from nltk import word_tokenize
 nltk.download('punkt')
 
-my_dirpath = '//files.geo.uzh.ch/private/ochesnok/home/Documents/2_projects/11_tranquillity/corpus/'
+my_dirpath = ''
 filename_input = 'geograph_data/gridimage_text.tsv'
 
 search_terms = ['tranquillity','tranquility','tranquil','silence','silent','peace','peaceful','serene','quiet','calmness','calm','pleasant','atmosphere']
