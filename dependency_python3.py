@@ -7,7 +7,7 @@ from collections import Counter
 spacy.prefer_gpu()
 nlp = spacy.load("en_core_web_sm")
 
-my_dirpath = '//files.geo.uzh.ch/private/ochesnok/home/Documents/2_projects/11_tranquillity/corpus/'
+my_dirpath = ''
 
 output_file = os.path.join(my_dirpath, 'all_tranquillity_dependencies_dates.csv')
 output_descriptions = codecs.open(output_file, 'w', 'utf-8')
