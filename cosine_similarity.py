@@ -8,7 +8,7 @@ import pandas as pd
 from sklearn.metrics.pairwise import pairwise_distances
 
 
-my_dirpath = ''
+my_dirpath = ' '
 
 landcover_class_list = ['broadleaved', 'coniferous', 'arable', 'grassland', 'urban', 'suburban']
 
